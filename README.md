@@ -42,7 +42,7 @@ Gracias a esta organización, las operaciones de búsqueda, inserción y elimina
 ```txt
 bst-project-java/
 │
-├── ficha-tecnica
+├── fichas-tecnicas
 │
 ├── src/
 │   ├── Node.java
