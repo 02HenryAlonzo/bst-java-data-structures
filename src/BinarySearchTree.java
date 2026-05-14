@@ -1,144 +1,141 @@
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Árbol Binario de Búsqueda (BST) implementado desde cero.
+ * Menores a la izquierda · Mayores a la derecha.
+ */
 public class BinarySearchTree {
 
     private Node root;
 
-    // Insertar un valor
+    public BinarySearchTree() {
+        this.root = null;
+    }
+
+    // ─────────────────────────────────────────────
+    //  INSERT
+    // ─────────────────────────────────────────────
+
     public void insert(int value) {
         root = insertRecursive(root, value);
     }
 
     private Node insertRecursive(Node current, int value) {
-
-        if (current == null) {
-            return new Node(value);
-        }
+        if (current == null) return new Node(value);
 
         if (value < current.value) {
-            current.left = insertRecursive(current.left, value);
+            current.left  = insertRecursive(current.left,  value);
         } else if (value > current.value) {
             current.right = insertRecursive(current.right, value);
         }
-
+        // valor duplicado: no se inserta
         return current;
     }
 
-    // Buscar un valor
+    // ─────────────────────────────────────────────
+    //  SEARCH
+    // ─────────────────────────────────────────────
+
     public boolean search(int value) {
         return searchRecursive(root, value);
     }
 
     private boolean searchRecursive(Node current, int value) {
+        if (current == null) return false;
+        if (value == current.value) return true;
 
-        if (current == null) {
-            return false;
-        }
-
-        if (current.value == value) {
-            return true;
-        }
-
-        if (value < current.value) {
-            return searchRecursive(current.left, value);
-        }
-
-        return searchRecursive(current.right, value);
+        return value < current.value
+                ? searchRecursive(current.left,  value)
+                : searchRecursive(current.right, value);
     }
 
-    // Eliminar un valor
-    public void delete(int value) {
+    // ─────────────────────────────────────────────
+    //  DELETE
+    // ─────────────────────────────────────────────
+
+    public boolean delete(int value) {
+        if (!search(value)) return false;
         root = deleteRecursive(root, value);
+        return true;
     }
 
     private Node deleteRecursive(Node current, int value) {
+        if (current == null) return null;
 
-        if (current == null) {
-            return null;
-        }
-
-        // Buscar el nodo
         if (value < current.value) {
-            current.left = deleteRecursive(current.left, value);
-            return current;
-        }
-
-        if (value > current.value) {
+            current.left  = deleteRecursive(current.left,  value);
+        } else if (value > current.value) {
             current.right = deleteRecursive(current.right, value);
-            return current;
+        } else {
+            // Caso 1: nodo hoja
+            if (current.left == null && current.right == null) return null;
+
+            // Caso 2: un solo hijo
+            if (current.left  == null) return current.right;
+            if (current.right == null) return current.left;
+
+            // Caso 3: dos hijos → sucesor in-order (mínimo del subárbol derecho)
+            int successor    = findMinValue(current.right);
+            current.value    = successor;
+            current.right    = deleteRecursive(current.right, successor);
         }
-
-        // Caso 1: nodo sin hijos
-        if (current.left == null && current.right == null) {
-            return null;
-        }
-
-        // Caso 2: nodo con un hijo
-        if (current.right == null) {
-            return current.left;
-        }
-
-        if (current.left == null) {
-            return current.right;
-        }
-
-        // Caso 3: nodo con dos hijos
-        int smallestValue = findSmallestValue(current.right);
-        current.value = smallestValue;
-
-        current.right = deleteRecursive(current.right, smallestValue);
-
         return current;
     }
 
-    // Obtener el valor menor
-    private int findSmallestValue(Node root) {
-
-        return root.left == null
-                ? root.value
-                : findSmallestValue(root.left);
+    private int findMinValue(Node node) {
+        while (node.left != null) node = node.left;
+        return node.value;
     }
 
-    // Recorrido In-Order
-    public void inOrder() {
-        inOrderRecursive(root);
-        System.out.println();
+    // ─────────────────────────────────────────────
+    //  TRAVERSALS
+    // ─────────────────────────────────────────────
+
+    public List<Integer> inOrder() {
+        List<Integer> result = new ArrayList<>();
+        inOrderRecursive(root, result);
+        return result;
     }
 
-    private void inOrderRecursive(Node current) {
-
-        if (current != null) {
-            inOrderRecursive(current.left);
-            System.out.print(current.value + " ");
-            inOrderRecursive(current.right);
-        }
+    private void inOrderRecursive(Node current, List<Integer> result) {
+        if (current == null) return;
+        inOrderRecursive(current.left,  result);
+        result.add(current.value);
+        inOrderRecursive(current.right, result);
     }
 
-    // Recorrido Pre-Order
-    public void preOrder() {
-        preOrderRecursive(root);
-        System.out.println();
+    public List<Integer> preOrder() {
+        List<Integer> result = new ArrayList<>();
+        preOrderRecursive(root, result);
+        return result;
     }
 
-    private void preOrderRecursive(Node current) {
-
-        if (current != null) {
-            System.out.print(current.value + " ");
-            preOrderRecursive(current.left);
-            preOrderRecursive(current.right);
-        }
+    private void preOrderRecursive(Node current, List<Integer> result) {
+        if (current == null) return;
+        result.add(current.value);
+        preOrderRecursive(current.left,  result);
+        preOrderRecursive(current.right, result);
     }
 
-    // Recorrido Post-Order
-    public void postOrder() {
-        postOrderRecursive(root);
-        System.out.println();
+    public List<Integer> postOrder() {
+        List<Integer> result = new ArrayList<>();
+        postOrderRecursive(root, result);
+        return result;
     }
 
-    private void postOrderRecursive(Node current) {
+    private void postOrderRecursive(Node current, List<Integer> result) {
+        if (current == null) return;
+        postOrderRecursive(current.left,  result);
+        postOrderRecursive(current.right, result);
+        result.add(current.value);
+    }
 
-        if (current != null) {
-            postOrderRecursive(current.left);
-            postOrderRecursive(current.right);
-            System.out.print(current.value + " ");
-        }
+    // ─────────────────────────────────────────────
+    //  UTILITIES
+    // ─────────────────────────────────────────────
+
+    public boolean isEmpty() {
+        return root == null;
     }
 }
