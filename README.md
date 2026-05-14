@@ -202,10 +202,10 @@ O(n)
 
 # 🎥 Video
 
-📹 Enlace del video:
 
 ```txt
-[Agregar enlace aquí]
+> **Enlace al video:** *[Haz Clic Aquí Para Ver el Video!](https://universidaddavincid-my.sharepoint.com/:v:/g/personal/202503003_estudiante_udv_edu_gt/IQBS3UriUm7fToN8ztyLCnkrAZzpHiV2wSEeFAj3U6-7-64?e=ekxox5&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)*
+---
 ```
 
 ---
